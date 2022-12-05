@@ -1,8 +1,6 @@
 ---
 import '../styles/global.css';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-
+import BaseLayout from '../layouts/BaseLayout.astro';
 
 const pagrTitle = "About Me";
 
@@ -23,8 +21,8 @@ const skillColor = "navy";
 const fontWeight = "bold";
 const textCase = "uppercase";
 ---
-<body>
-  <Header />
+<BaseLayout pageTitle={pagrTitle}>
+
   <h1>{pagrTitle}</h1>
   <style define:vars={{skillColor}}>
     h1 {
@@ -59,8 +57,4 @@ const textCase = "uppercase";
     {happy && <p>I am happy to be learning Astro!</p>}
     {finished && <p>I finished this tutorial!</p>}
     {goal === 3 ? <p>My goal is to finish in 3 days.</p> : <p>My goal is not 3 days.</p>}
-    <Footer />
-    <script>
-      import "../scripts/menu.js";
-    </script>
-</body>
+  </BaseLayout>
