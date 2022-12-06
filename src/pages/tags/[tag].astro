@@ -1,19 +1,28 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogPost from '../../components/BlogPost.astro';
 
 export async function getStaticPaths() {
-  return [
-    { params: { tag: "astro" } },
-    { params: { tag: "successes" } },
-    { params: { tag: "community" } },
-    { params: { tag: "blogging" } },
-    { params: { tag: "setbacks" } },
-    { params: { tag: "learning in public" } },
-  ];
+  const allPosts = await Astro.glob('../posts/*.md')
+
+  
+  const allPostTags = allPosts.map(post=> post.frontmatter.tags).flat(1) // get all the tags used by .md with duplicated value
+  const uniqueTags = [... new Set(allPostTags)]
+
+  return uniqueTags.map( tag => {
+    const filteredPosts = allPosts.filter((post)=> post.frontmatter.tags.includes(tag));
+    return {params: { tag:tag }, props: {posts: filteredPosts}}
+  })
 }
 
+// page params
 const { tag } = Astro.params;
+const { posts } = Astro.props;
+
 ---
 <BaseLayout pageTitle={tag}>
   <p>Posts tagged with {tag}</p>
+  <ul>
+    {posts.map((post) => <BlogPost url={post.url} title={post.frontmatter.title} />)}
+  </ul>
 </BaseLayout>
